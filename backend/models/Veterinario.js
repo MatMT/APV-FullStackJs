@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
+import generarId from "../helpers/generarId.js";
+
 const { Schema } = mongoose;
 const { model } = mongoose;
 
@@ -31,7 +34,8 @@ const veterinarioSchema = new Schema(
             default: null,
         },
         token: {
-            type: String
+            type: String,
+            default: generarId()
         },
         confirm: {
             type: Boolean,
@@ -41,8 +45,20 @@ const veterinarioSchema = new Schema(
             type: Boolean,
             default: null
         }
+
     }
 );
+
+// Función a ejecutar antes de guardar en la BD
+veterinarioSchema.pre('save', async function () {
+    // El campo contraseña no ha sido modificado, continuará al siguiente Middleware
+    if (!this.isModified('pasword')) {
+        next();
+    }
+    const salt = await bcrypt.genSalt(10);
+    // Módificar password antes de que se almacene
+    this.password = await bcrypt.hash(this.password, salt);
+});
 
 // Declaración del modelo
 const Veterinario = model("Veterinario", veterinarioSchema);

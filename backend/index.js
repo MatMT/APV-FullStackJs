@@ -21,5 +21,5 @@ const PORT = process.env.PORT || 4000;
 app.use('/api/veterinarios', veterinarioRoutes);
 
 app.listen(4000, () => {
-    console.log(`http:/localhost:${PORT}`);
+    console.log(`http://localhost:${PORT}`);
 });

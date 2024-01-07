@@ -22,7 +22,6 @@ const veterinarioSchema = new Schema(
             required: true,
             unique: true,
             trim: true
-
         },
         telephone: {
             type: String,
@@ -50,15 +49,21 @@ const veterinarioSchema = new Schema(
 );
 
 // Función a ejecutar antes de guardar en la BD
-veterinarioSchema.pre('save', async function () {
+veterinarioSchema.pre('save', async function (next) {
     // El campo contraseña no ha sido modificado, continuará al siguiente Middleware
-    if (!this.isModified('pasword')) {
+    if (!this.isModified('password')) {
         next();
     }
     const salt = await bcrypt.genSalt(10);
     // Módificar password antes de que se almacene
     this.password = await bcrypt.hash(this.password, salt);
 });
+
+// Funciones a ejecutar solamente en este modelo
+veterinarioSchema.methods.comprobarPassword = async function (passwordForm) {
+    // Retorna true o false
+    return await bcrypt.compare(passwordForm, this.password);
+}
 
 // Declaración del modelo
 const Veterinario = model("Veterinario", veterinarioSchema);

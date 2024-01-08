@@ -3,7 +3,7 @@ import Veterinario from "../models/Veterinario.js";
 import generarId from "../helpers/generarId.js";
 
 const registrar = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { email } = req.body;
 
     // Prevenir usuarios duplicados
     const existUser = await Veterinario.findOne({ email });
@@ -52,6 +52,7 @@ const confirmar = async (req, res) => {
         res.json({ usuarioConfirmar });
     } catch (error) {
         console.log(error);
+        process.exit(1);
     }
 }
 
@@ -97,7 +98,8 @@ const changePassword = async (req, res) => {
         await existeVeterinario.save();
         res.json({ msg: 'Confirma el email enviado a correo para restaurar tu contraseña' });
     } catch (error) {
-
+        console.log(error);
+        process.exit(1);
     }
 }
 
@@ -140,6 +142,7 @@ const newPassword = async (req, res) => {
         res.json({ msg: 'Password modificado correctamente' });
     } catch (error) {
         console.log(error);
+        process.exit(1);
     }
 }
 

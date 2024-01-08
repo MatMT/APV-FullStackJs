@@ -1,5 +1,6 @@
 import generarJWT from "../helpers/generarJWT.js";
 import Veterinario from "../models/Veterinario.js";
+import generarId from "../helpers/generarId.js";
 
 const registrar = async (req, res) => {
     const { name, email, password } = req.body;
@@ -28,7 +29,9 @@ const registrar = async (req, res) => {
 };
 
 const perfil = (req, res) => {
-    res.json({ msg: 'Profile' })
+    const { veterinario } = req;
+
+    res.json({ veterinario })
 };
 
 const confirmar = async (req, res) => {
@@ -71,16 +74,78 @@ const autenticar = async (req, res) => {
     // Revisar el password
     if (await usuario.comprobarPassword(password)) {
         // Autenticar al usuario
-
         res.json({ token: generarJWT(usuario.id) });
     } else {
         const error = new Error('El Password es incorrecto');
         return res.status(403).json({ msg: error.message });
-        res.json({ error: "error" });
+    }
+}
+
+// Válidar el email 
+const changePassword = async (req, res) => {
+    const { email } = req.body;
+
+    const existeVeterinario = await Veterinario.findOne({ email });
+    // Validación existencia de usuario
+    if (!existeVeterinario) {
+        const error = new Error('El Usuario no existe');
+        return res.status(400).json({ msg: error.message });
+    }
+
+    try {
+        existeVeterinario.token = generarId();
+        await existeVeterinario.save();
+        res.json({ msg: 'Confirma el email enviado a correo para restaurar tu contraseña' });
+    } catch (error) {
+
+    }
+}
+
+// Lectura del token
+const validateToken = async (req, res) => {
+    const { token } = req.params;
+    const tokenValido = await Veterinario.findOne({ token });
+
+    if (tokenValido) {
+        // El Token es válido, si existe
+        res.json({ msg: "Token válido, el usuario si existe" });
+
+    } else {
+        const error = new Error('Token no válido');
+        return res.status(404).json({ msg: error.message });
+    }
+
+
+}
+
+// Guardar nueva password
+const newPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    // Validación de token
+    const veterinario = await Veterinario.findOne({ token });
+    if (!veterinario) {
+        const error = new Error('Hubo un error');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    try {
+        // Token de un solo uso
+        veterinario.token = null;
+        // Asignación de nueva contraseña
+        veterinario.password = password;
+        // Guardar cambios en la BD
+        await veterinario.save();
+        res.json({ msg: 'Password modificado correctamente' });
+    } catch (error) {
+        console.log(error);
     }
 }
 
 // Exportación de funciones para el router
 export {
-    registrar, perfil, confirmar, autenticar
+    registrar, perfil, confirmar,
+    autenticar, changePassword, validateToken,
+    newPassword
 }

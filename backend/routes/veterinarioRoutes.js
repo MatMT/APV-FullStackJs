@@ -1,17 +1,24 @@
 import express from 'express';
 import checkAuth from '../middleware/authMiddleware.js';
-import { registrar, perfil, confirmar, autenticar } from '../controllers/veterinarioController.js';
+import { registrar, perfil, confirmar, autenticar, changePassword, validateToken, newPassword } from '../controllers/veterinarioController.js';
 
 const router = express.Router();
 
-// Asignación de métodos diferentes a URL's 
-router.post('/', registrar);
-// Parámetro dinámico
-router.get('/confirmar/:token', confirmar);
+// URL PÚBLICA ==================================
+router.post('/', registrar); // Asignación de métodos diferentes a URL's 
+router.get('/confirm/:token', confirmar); // Parámetro dinámico
+router.post('/login', autenticar);
+router.post('/change-password', changePassword)
+router.route("/change-password/:token") // Chaining route
+    .get(validateToken)
+    .post(newPassword);
 
-router.post('/login', autenticar)
 
 // URL PRIVADAS ==================================
 // Implementación de middleware, antes de la respectiva función
-router.get('/perfil', checkAuth, perfil)
+router.get('/profile', checkAuth, perfil)
+
+
+
+
 export default router;

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 
 function Login() {
     return (
@@ -5,7 +6,7 @@ function Login() {
             <div>
                 <h1 className="text-sky-600 font-black text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-0">Inicia Sesión y Administra tus <span className="text-gray-700">Pacientes</span></h1>
             </div>
-            <div>
+            <div className='mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white'>
                 <form action="" method="post" className="space-y-4">
 
                     <div>
@@ -13,7 +14,7 @@ function Login() {
                             className="uppercase text-gray-600 block text-xl font-bold">
                             Email
                         </label>
-                        <input type="text" placeholder="Email de Registro"
+                        <input type="email" placeholder="Tu Email de Registro"
                             className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
                         />
                     </div>
@@ -32,8 +33,17 @@ function Login() {
                         className="bg-sky-600 w-full py-3 px-10 rounded-xl text-white uppercase font-bold !mt-8 hover:cursor-pointer hover:bg-sky-700 xl:w-auto "
                     />
                 </form>
-            </div>
 
+                <nav className='mt-10 lg:flex lg:justify-between'>
+                    <Link
+                        className='block text-center my-5 text-gray-500'
+                        to="/registrar">¿No tienes una cuenta? Regístrate</Link>
+                    <Link
+                        className='block text-center my-5 text-gray-500'
+                        to="/change-pass">Olvide mi Password</Link>
+                </nav>
+
+            </div>
         </>
     )
 }

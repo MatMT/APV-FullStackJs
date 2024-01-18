@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
+import TitleMain from '../components/TitleIndex';
 
 function Login() {
     return (
         <>
-            <div>
-                <h1 className="text-sky-600 font-black text-4xl md:text-5xl lg:text-6xl mb-4 md:mb-0">Inicia Sesión y Administra tus <span className="text-gray-700">Pacientes</span></h1>
-            </div>
+            <TitleMain text="Inicia Sesión y Administra tus" color={"sky"} />
+
             <div className='mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white'>
                 <form action="" method="post" className="space-y-4">
 

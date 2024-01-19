@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom"
+import axios from 'axios';
 
 import Alerta from "../components/Alerta";
 import TitleMain from "../components/TitleIndex"
 
 function Registrar() {
-    const [nombre, setNombre] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [repetirPassword, setRepetirPassword] = useState('');
 
     const [alerta, setAlerta] = useState({});
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
 
-        if ([nombre, email, password, repetirPassword].includes('')) {
+        if ([name, email, password, repetirPassword].includes('')) {
             setAlerta({ msg: 'Hay campos vacíos', error: true })
             return; // Validación campos vacíos
         }
@@ -32,7 +33,24 @@ function Registrar() {
 
         setAlerta({});
 
-        console.log("Nice");
+        // Crear el usuario en la API
+        try {
+            const url = "http://localhost:4000/api/veterinarios"
+            const respuesta = await axios.post(url, {
+                name, email, password
+            });
+
+            setAlerta({
+                msg: "Registrado Correctamente, revisa tu email",
+                error: false
+            });
+
+        } catch (error) {
+            setAlerta({
+                msg: "Email ya registrado",
+                error: true
+            })
+        }
     }
 
     const { msg } = alerta;
@@ -56,8 +74,8 @@ function Registrar() {
                         </label>
                         <input type="text" placeholder="Tu nombre"
                             className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
-                            value={nombre}
-                            onChange={e => setNombre(e.target.value)}
+                            value={name}
+                            onChange={e => setName(e.target.value)}
                         />
                     </div>
 

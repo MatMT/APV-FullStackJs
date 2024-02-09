@@ -36,10 +36,10 @@ function Login() {
 
                 <nav className='mt-10 lg:flex lg:justify-between'>
                     <Link
-                        className='block text-center my-5 text-gray-500'
+                        className='block text-center my-5 font-semibold text-gray-600'
                         to="/registrar">¿No tienes una cuenta? Regístrate</Link>
                     <Link
-                        className='block text-center my-5 text-gray-500'
+                        className='block text-center my-5 font-semibold text-gray-600'
                         to="/change-pass">Olvide mi Password</Link>
                 </nav>
 

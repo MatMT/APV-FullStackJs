@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom"
-import axios from 'axios';
 
 import Alerta from "../components/Alerta";
 import TitleMain from "../components/TitleIndex"
+import clienteAxios from "../config/axios";
 
 function Registrar() {
     const [name, setName] = useState('');
@@ -35,10 +35,8 @@ function Registrar() {
 
         // Crear el usuario en la API
         try {
-            const url = "http://localhost:4000/api/veterinarios"
-            const respuesta = await axios.post(url, {
-                name, email, password
-            });
+            const url = `/veterinarios"`
+            await clienteAxios.post(url, { name, email, password });
 
             setAlerta({
                 msg: "Registrado Correctamente, revisa tu email",
@@ -115,17 +113,17 @@ function Registrar() {
                         />
                     </div>
 
-                    <input type="submit" value="Iniciar Sesión"
+                    <input type="submit" value="Registrar"
                         className="bg-emerald-600 w-full py-3 px-10 rounded-xl text-white uppercase font-bold !mt-8 hover:cursor-pointer hover:bg-emerald-700 xl:w-auto "
                     />
                 </form>
 
                 <nav className='mt-10 lg:flex lg:justify-between'>
                     <Link
-                        className='block text-center my-5 text-gray-500'
+                        className='block text-center my-5font-semibold text-gray-600'
                         to="/">¿Ya tienes una cuenta? Inicia sesión</Link>
                     <Link
-                        className='block text-center my-5 text-gray-500'
+                        className='block text-center my-5font-semibold text-gray-600'
                         to="/change-pass">Olvide mi Password</Link>
                 </nav>
 

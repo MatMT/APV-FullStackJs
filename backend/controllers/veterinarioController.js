@@ -1,9 +1,10 @@
 import generarJWT from "../helpers/generarJWT.js";
 import Veterinario from "../models/Veterinario.js";
 import generarId from "../helpers/generarId.js";
+import emailRegistro from "../helpers/emailRegistro.js";
 
 const registrar = async (req, res) => {
-    const { email } = req.body;
+    const { email, name, nombre } = req.body;
 
     // Prevenir usuarios duplicados
     const existUser = await Veterinario.findOne({ email });
@@ -19,6 +20,13 @@ const registrar = async (req, res) => {
         const veterinario = new Veterinario(req.body);
         // Método de Mongoose para guardar objeto en la DB
         const saveVeterinario = await veterinario.save();
+
+        // Enviar el email, posteriormente a su registro en la DB
+        emailRegistro({
+            email,
+            name,
+            token: saveVeterinario.token
+        });
 
         res.json(saveVeterinario)
     } catch (error) {
@@ -49,7 +57,7 @@ const confirmar = async (req, res) => {
 
         await usuarioConfirmar.save();
 
-        res.json({ usuarioConfirmar });
+        res.json({ msg: "Usuario confirmado Correctamente." })
     } catch (error) {
         console.log(error);
         process.exit(1);

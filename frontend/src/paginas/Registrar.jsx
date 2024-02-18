@@ -17,7 +17,7 @@ function Registrar() {
         e.preventDefault();
 
         if ([name, email, password, repetirPassword].includes('')) {
-            setAlerta({ msg: 'Hay campos vacíos', error: true })
+            setAlerta({ msg: 'Campos vacíos', error: true })
             return; // Validación campos vacíos
         }
 

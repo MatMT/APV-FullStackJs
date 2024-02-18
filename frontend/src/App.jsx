@@ -4,22 +4,28 @@ import Login from "./paginas/Login";
 import Registrar from "./paginas/Registrar";
 import ChangePass from "./paginas/ChangePass";
 import ConfirmAcc from "./paginas/ConfirmAcc";
+import NuevoPassword from "./paginas/NuevoPassword";
+import { AuthProvider } from "./context/AuthProvider";
 
 function App() {
 
   return (
+
     <BrowserRouter>
-      <Routes>
+      <AuthProvider>
 
-        {/* Main Page, Componente Padre Auth */}
-        <Route path="/" element={<AuthLayout />}>
-          <Route index element={<Login />} />
-          <Route path="registrar" element={<Registrar />} />
-          <Route path="change-pass" element={<ChangePass />} />
-          <Route path="confirm/:id" element={<ConfirmAcc />} />
-        </Route>
+        <Routes>
+          {/* Main Page, Componente Padre Auth */}
+          <Route path="/" element={<AuthLayout />}>
+            <Route index element={<Login />} />
+            <Route path="registrar" element={<Registrar />} />
+            <Route path="change-pass" element={<ChangePass />} />
+            <Route path="change-pass/:token" element={<NuevoPassword />} />
+            <Route path="confirm/:id" element={<ConfirmAcc />} />
+          </Route>
+        </Routes>
 
-      </Routes>
+      </AuthProvider>
     </BrowserRouter >
   )
 }

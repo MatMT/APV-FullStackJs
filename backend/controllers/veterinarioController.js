@@ -2,6 +2,7 @@ import generarJWT from "../helpers/generarJWT.js";
 import Veterinario from "../models/Veterinario.js";
 import generarId from "../helpers/generarId.js";
 import emailRegistro from "../helpers/emailRegistro.js";
+import emailSavePass from "../helpers/emailSavePass.js";
 
 const registrar = async (req, res) => {
     const { email, name, nombre } = req.body;
@@ -42,6 +43,7 @@ const perfil = (req, res) => {
     res.json({ veterinario })
 };
 
+// Válidar el email 
 const confirmar = async (req, res) => {
     const { token } = req.params;
     const usuarioConfirmar = await Veterinario.findOne({ token });
@@ -90,7 +92,6 @@ const autenticar = async (req, res) => {
     }
 }
 
-// Válidar el email 
 const changePassword = async (req, res) => {
     const { email } = req.body;
 
@@ -104,7 +105,16 @@ const changePassword = async (req, res) => {
     try {
         existeVeterinario.token = generarId();
         await existeVeterinario.save();
-        res.json({ msg: 'Confirma el email enviado a correo para restaurar tu contraseña' });
+
+        // Enviar Email con instrucciones
+        emailSavePass({
+            email,
+            name: existeVeterinario.name,
+            token: existeVeterinario.token
+        })
+
+
+        res.json({ msg: 'Confirma el email enviado a tu correo para restaurar tu contraseña' });
     } catch (error) {
         console.log(error);
         process.exit(1);

@@ -1,13 +1,51 @@
 import { Link } from "react-router-dom"
+import { useState } from "react"
+
+import Alerta from "../components/Alerta"
+import clienteAxios from "../config/axios"
 import TitleMain from "../components/TitleIndex"
 
 function ChangePass() {
+
+    const [email, setEmail] = useState('');
+    const [alerta, setAlerta] = useState({});
+
+    const handleSubmit = async e => {
+        e.preventDefault();
+
+        if (email === '' || email.length < 5) {
+            setAlerta({ msg: 'El Email es Obligatorio', error: true });
+            return;
+        }
+
+        try {
+            const { data } = await clienteAxios.post(`/veterinarios/change-password`, { email });
+
+            setAlerta({ msg: data.msg });
+        } catch (error) {
+            setAlerta({
+                msg: error.response.data.msg,
+                error: true
+            });
+        }
+    }
+
+    const { msg } = alerta;
+
+
     return (
         <>
             <TitleMain text="Recupera tu Contraseña y Accede a tu" span="Cuenta" color={"yellow"} />
 
             <div className='mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white'>
-                <form action="" method="post" className="space-y-4">
+
+                {msg && <Alerta
+                    alerta={alerta}
+                />}
+
+                <form action="" method="post" className="space-y-4"
+                    onSubmit={handleSubmit}
+                >
 
                     <div>
                         <label htmlFor=""
@@ -16,6 +54,8 @@ function ChangePass() {
                         </label>
                         <input type="email" placeholder="Tu Email de Registro"
                             className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
                         />
                     </div>
 

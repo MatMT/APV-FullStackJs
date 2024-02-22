@@ -5,6 +5,8 @@ import clienteAxios from '../config/axios';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+
+    const [cargando, setCargando] = useState(true);
     // State Global
     const [auth, setAuth] = useState({});
 
@@ -14,7 +16,10 @@ const AuthProvider = ({ children }) => {
             const token = localStorage.getItem('token');
 
             // Si no hay token
-            if (!token) return;
+            if (!token) {
+                setCargando(false);
+                return;
+            }
 
             const config = {
                 headers: {
@@ -25,7 +30,7 @@ const AuthProvider = ({ children }) => {
 
             try {
                 // Petición GET con Config
-                const { data } = await clienteAxios('veterinarios/perfil', config);
+                const { data } = await clienteAxios('veterinarios/profile', config);
 
                 setAuth(data);
             } catch (error) {
@@ -33,6 +38,7 @@ const AuthProvider = ({ children }) => {
                 setAuth({});
             }
 
+            setCargando(false);
         }
 
         autenticarUsuario();
@@ -43,7 +49,8 @@ const AuthProvider = ({ children }) => {
             // Disponer de manera Global
             value={{
                 auth,
-                setAuth
+                setAuth,
+                cargando
             }}
         >
             {children}

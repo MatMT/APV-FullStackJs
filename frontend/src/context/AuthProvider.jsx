@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
                 // Petición GET con Config
                 const { data } = await clienteAxios('veterinarios/profile', config);
 
-                setAuth(data);
+                setAuth(data.veterinario);
             } catch (error) {
                 console.log(error.response.data.msg);
                 setAuth({});
@@ -44,13 +44,19 @@ const AuthProvider = ({ children }) => {
         autenticarUsuario();
     }, [])
 
+    const cerrarSesion = () => {
+        localStorage.removeItem('token');
+        setAuth({});
+    }
+
     return (
         <AuthContext.Provider
             // Disponer de manera Global
             value={{
                 auth,
                 setAuth,
-                cargando
+                cargando,
+                cerrarSesion
             }}
         >
             {children}

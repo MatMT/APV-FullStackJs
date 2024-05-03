@@ -13,9 +13,13 @@ const RouteProtected = () => {
 
     return (
         <>
-            {/* Si auth es true muestra, sino redirige */}
             <Header />
-            {auth.veterinario?._id ? <Outlet /> : <Navigate to="/" />}
+            {auth?._id ?
+                <main className="container mx-auto mt-10">
+                    <Outlet />
+                </main>
+                :
+                <Navigate to="/" />}
             <Footer />
         </>
     )

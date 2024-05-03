@@ -1,16 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import clienteAxios from '../config/axios';
 import TitleMain from '../components/TitleIndex';
 import useAuth from '../hooks/useAuth';
 import Alerta from '../components/Alerta';
+// import { set } from 'mongoose';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { setAuth, auth } = useAuth();
+    const { auth, setAuth } = useAuth();
     const [alerta, setAlerta] = useState({});
 
     // Redireccionar al usuario
@@ -28,6 +29,9 @@ function Login() {
             const { data } = await clienteAxios.post('/veterinarios/login', { email, password });
             // Token de autenticación
             localStorage.setItem('token', data.token);
+
+            setAuth(data);
+
             // Redireccionar tras la autenticación
             navigate('/admin');
 

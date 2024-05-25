@@ -16,7 +16,7 @@ const pacientesSchema = new Schema({
         type: String,
         required: true
     },
-    fecha_alta: {
+    fechaAlta: {
         type: Date,
         required: true,
         default: Date.now()

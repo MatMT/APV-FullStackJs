@@ -13,6 +13,7 @@ import AdminPacientes from "./paginas/AdminPacientes";
 
 // Context
 import { AuthProvider } from "./context/AuthProvider";
+import { PacientesProvider } from "./context/PacientesProvider";
 
 function App() {
 
@@ -21,23 +22,23 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
 
-        <Routes>
-          {/* Main Page, Componente Padre Auth */}
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Login />} />
-            <Route path="registrar" element={<Registrar />} />
-            <Route path="change-pass" element={<ChangePass />} />
-            <Route path="change-pass/:token" element={<NuevoPassword />} />
-            <Route path="confirm/:id" element={<ConfirmAcc />} />
-          </Route>
+        <PacientesProvider>
+          <Routes>
+            {/* Main Page, Componente Padre Auth */}
+            <Route path="/" element={<AuthLayout />}>
+              <Route index element={<Login />} />
+              <Route path="registrar" element={<Registrar />} />
+              <Route path="change-pass" element={<ChangePass />} />
+              <Route path="change-pass/:token" element={<NuevoPassword />} />
+              <Route path="confirm/:id" element={<ConfirmAcc />} />
+            </Route>
 
-          <Route path="/admin" element={<RouteProtected />}>
-            <Route index element={<AdminPacientes />} />
-          </Route>
+            <Route path="/admin" element={<RouteProtected />}>
+              <Route index element={<AdminPacientes />} />
+            </Route>
 
-        </Routes>
-
-
+          </Routes>
+        </PacientesProvider>
 
       </AuthProvider >
     </BrowserRouter >

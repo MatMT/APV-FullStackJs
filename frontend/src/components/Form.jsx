@@ -1,4 +1,31 @@
-function Form() {
+import { useState } from "react";
+
+import Alerta from "../components/Alerta";
+
+const Form = () => {
+    const [name, setName] = useState('');
+    const [owner, setOwner] = useState('');
+    const [email, setEmail] = useState('');
+    const [fechaAlta, setfechaAlta] = useState(Date.now());
+    const [symptoms, setSymptoms] = useState('');
+
+    const [alert, setAlert] = useState({});
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        // Válidar el formulario
+        if ([name, owner, email, fechaAlta, symptoms].includes('')) {
+            setAlert({
+                msg: 'Todos los campos son obligatorios',
+                error: true
+            });
+            return;
+        }
+    }
+
+    const { msg } = alert;
+
     return (
         <>
             <p className="text-lg text-center mb-10 font-semibold">
@@ -6,25 +33,38 @@ function Form() {
                 <span className="text-rose-600">Administralos</span>
             </p>
 
-            <form className="bg-white py-10 px-5 mb-10 lg:mb-0 shadow-md rounded-md">
+            {msg && <Alerta
+                alerta={alert}
+            />}
+
+            <form className="bg-white py-10 px-5 mb-10 lg:mb-0 shadow-md rounded-md"
+                onSubmit={handleSubmit}
+            >
+
                 <div className="mb-5">
-                    <label htmlFor="mascota"
+                    <label htmlFor="name"
                         className="text-gray-700 font-bold uppercase"
                     >Nombre Mascota</label>
-                    <input type="text" name="mascota"
-                        id="mascota" placeholder="Nombre de la Mascota"
+                    <input type="text" name="name"
+                        id="name" placeholder="Nombre de la Mascota"
                         className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
                     />
                 </div>
+
                 <div className="mb-5">
-                    <label htmlFor="propietario"
+                    <label htmlFor="owner"
                         className="text-gray-700 font-bold uppercase"
                     >Nombre Propietario</label>
-                    <input type="text" name="propietario"
-                        id="propietario" placeholder="Nombre del Propietario"
+                    <input type="text" name="owner"
+                        id="owner" placeholder="Nombre del Propietario"
                         className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                        value={owner}
+                        onChange={e => setOwner(e.target.value)}
                     />
                 </div>
+
                 <div className="mb-5">
                     <label htmlFor="email"
                         className="text-gray-700 font-bold uppercase"
@@ -32,22 +72,30 @@ function Form() {
                     <input type="email" name="email"
                         id="email" placeholder="Email del Propietario"
                         className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                     />
                 </div>
+
                 <div className="mb-5">
-                    <label htmlFor="fecha"
+                    <label htmlFor="fechaAlta"
                         className="text-gray-700 font-bold uppercase"
                     >Fecha Alta</label>
-                    <input type="date" name="fecha"
-                        id="fecha" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                    <input type="date" name="fechaAlta"
+                        id="fechaAlta" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                        value={fechaAlta}
+                        onChange={e => setfechaAlta(e.target.value)}
                     />
                 </div>
+
                 <div className="mb-5">
-                    <label htmlFor="sintomas"
+                    <label htmlFor="symptoms"
                         className="text-gray-700 font-bold uppercase"
                     >Síntomas</label>
-                    <textarea name="sintomas" placeholder="Describe los Síntomas del Paciente"
-                        id="sintomas" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                    <textarea name="symptoms" placeholder="Describe los Síntomas del Paciente"
+                        id="symptoms" className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-lg"
+                        value={symptoms}
+                        onChange={e => setSymptoms(e.target.value)}
                     />
                 </div>
 

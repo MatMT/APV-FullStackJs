@@ -16,7 +16,7 @@ function AdminPacientes() {
                 Mostrar Formulario
             </button>
 
-            <div className={`${showForm ? 'block' : 'hidden'} md:w-1/2 lg:w-2/5`}>
+            <div className={`${showForm ? 'block' : 'hidden'} md:block md:w-1/2 lg:w-2/5`}>
                 <Form />
             </div>
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Alerta from "../components/Alerta";
 import usePacientes from "../hooks/usePacientes"
@@ -9,10 +9,24 @@ const Form = () => {
     const [email, setEmail] = useState('');
     const [fechaAlta, setfechaAlta] = useState('');
     const [symptoms, setSymptoms] = useState('');
+    const [id, setId] = useState(null);
 
     const [alert, setAlert] = useState({});
 
-    const { savePaciente } = usePacientes();
+    const { savePaciente, paciente } = usePacientes();
+
+    useEffect(() => {
+        if (paciente?.name) {
+            setName(paciente.name);
+            setOwner(paciente.owner);
+            setEmail(paciente.email);
+            setfechaAlta(paciente.fechaAlta);
+            setSymptoms(paciente.symptoms);
+
+            setId(paciente._id);
+        }
+        console.log(paciente);
+    }, [paciente]);
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -26,7 +40,8 @@ const Form = () => {
             return;
         }
 
-        savePaciente({ name, owner, email, fechaAlta, symptoms });
+        setAlert({});
+        savePaciente({ name, owner, email, fechaAlta, symptoms, id });
     }
 
     const { msg } = alert;
@@ -108,7 +123,11 @@ const Form = () => {
                     />
                 </div>
 
-                <input type="submit" value="Agregar Paciente"
+                <input type="submit" value={id ? 'Guardar Cambios' : 'Registrar Paciente'}
+                    className="bg-rose-600 hover:bg-rose-700 w-full p-3 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors"
+                />
+
+                <input type="submit" value={id ? 'Guardar Cambios' : 'Registrar Paciente'}
                     className="bg-rose-600 hover:bg-rose-700 w-full p-3 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors"
                 />
             </form>

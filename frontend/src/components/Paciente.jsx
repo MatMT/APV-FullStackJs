@@ -1,8 +1,11 @@
+import usePacientes from '../hooks/usePacientes';
 
 export const Paciente = ({ paciente }) => {
+
+    const { setEdicion } = usePacientes();
     const { name, owner, email, fechaAlta, symptoms } = paciente;
 
-    console.log(fechaAlta);
+    // console.log(fechaAlta);
 
     const formatearFecha = (fecha) => {
         const nuevaFecha = new Date(fecha);
@@ -33,7 +36,9 @@ export const Paciente = ({ paciente }) => {
 
             <div className="flex justify-between pt-5">
                 <button type="button" className="py-2 px-10 bg-rose-500
-                hover:bg-rose-600 text-white uppercase font-bold rounded-lg">
+                hover:bg-rose-600 text-white uppercase font-bold rounded-lg"
+                    onClick={() => setEdicion(paciente)}
+                >
                     Editar
                 </button>
 

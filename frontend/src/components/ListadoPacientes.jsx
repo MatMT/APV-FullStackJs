@@ -2,7 +2,9 @@ import usePacientes from '../hooks/usePacientes';
 import { Paciente } from './Paciente';
 
 function ListadoPacientes() {
-    const { pacientes } = usePacientes();
+    const { pacientes, loading } = usePacientes();
+
+    if (loading) return <p className='text-rose-600 text-2xl text-center'>Cargando...</p>
 
     return (
         <>

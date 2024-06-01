@@ -1,11 +1,15 @@
 import { createContext, useState, useEffect } from "react";
 import clienteAxios from "../config/axios";
+import useAuth from "../hooks/useAuth";
 
 const PacientesContext = createContext();
 
 export const PacientesProvider = ({ children }) => {
+    const { auth } = useAuth();
 
+    const [loading, setLoading] = useState(true);
     const [pacientes, setPacientes] = useState([]);
+    const [paciente, setPaciente] = useState({});
 
     useEffect(() => {
         const getPacientes = async () => {
@@ -13,6 +17,7 @@ export const PacientesProvider = ({ children }) => {
                 const token = localStorage.getItem('token');
                 if (!token) return;
 
+                setLoading(true);
                 const config = {
                     headers: {
                         "Content-Type": "application/json",
@@ -22,13 +27,16 @@ export const PacientesProvider = ({ children }) => {
 
                 const { data } = await clienteAxios('/pacientes', config);
                 setPacientes(data);
+
             } catch (error) {
                 console.log(error.response.data.msg);
             }
+
+            setLoading(false);
         }
 
         getPacientes();
-    }, []);
+    }, [auth]);
 
     const savePaciente = async (paciente) => {
         try {
@@ -51,11 +59,18 @@ export const PacientesProvider = ({ children }) => {
         }
     }
 
+    const setEdicion = (paciente) => {
+        setPaciente(paciente);
+    }
+
     return (
         <PacientesContext.Provider
             value={{
                 pacientes,
-                savePaciente
+                savePaciente,
+                loading,
+                setEdicion,
+                paciente
             }}
         >
             {children}

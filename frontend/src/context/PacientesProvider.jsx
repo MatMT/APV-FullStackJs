@@ -10,6 +10,7 @@ export const PacientesProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [pacientes, setPacientes] = useState([]);
     const [paciente, setPaciente] = useState({});
+    const [edicionHTML, setEdicionHTML] = useState(false);
 
     useEffect(() => {
         const getPacientes = async () => {
@@ -39,7 +40,58 @@ export const PacientesProvider = ({ children }) => {
     }, [auth]);
 
     const savePaciente = async (paciente) => {
-        try {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        if (paciente.id) {
+            try {
+                const { data } = await clienteAxios.put(`/pacientes/${paciente.id}`,
+                    paciente,
+                    config
+                );
+
+                // Se itera sobre el array de pacientes y se actualiza el paciente que se modificó
+                const pacientesActualizado = pacientes.map(
+                    pacienteState => pacienteState._id === data._id ? data : pacienteState
+                );
+
+                setPacientes(pacientesActualizado);
+
+            } catch (error) {
+                console.log(error.response.data.msg);
+            }
+        } else {
+            try {
+                const { data } = await clienteAxios.post('/pacientes', paciente, config);
+                const { pacienteAlmacenado } = data;
+                const { createdAt, updatedAt, __v, ...datosPaciente } = pacienteAlmacenado;
+
+                setPacientes([datosPaciente, ...pacientes]);
+            } catch (error) {
+                console.log(error.response.data.msg);
+            }
+        }
+
+    }
+
+    const setEdicion = (paciente) => {
+        setPaciente(paciente);
+    }
+
+    useEffect(() => {
+        if (!edicionHTML) {
+            setPaciente({});
+        }
+    }, [edicionHTML]);
+
+    const eliminarPaciente = (id) => {
+        const confirmar = confirm('¿Estás seguro de eliminar este paciente?');
+        if (confirmar) {
             const token = localStorage.getItem('token');
             const config = {
                 headers: {
@@ -48,19 +100,18 @@ export const PacientesProvider = ({ children }) => {
                 }
             }
 
-            const { data } = await clienteAxios.post('/pacientes', paciente, config);
-            const { pacienteAlmacenado } = data;
+            try {
+                clienteAxios.delete(`/pacientes/${id}`, config);
+                const pacientesActualizado = pacientes.filter(
+                    paciente => paciente._id !== id
+                );
 
-            const { createdAt, updatedAt, __v, ...datosPaciente } = pacienteAlmacenado;
-
-            setPacientes([datosPaciente, ...pacientes]);
-        } catch (error) {
-            console.log(error.response.data.msg);
+                setPacientes(pacientesActualizado);
+                alert('Paciente eliminado correctamente');
+            } catch (error) {
+                console.log(error.response.data.msg);
+            }
         }
-    }
-
-    const setEdicion = (paciente) => {
-        setPaciente(paciente);
     }
 
     return (
@@ -70,7 +121,10 @@ export const PacientesProvider = ({ children }) => {
                 savePaciente,
                 loading,
                 setEdicion,
-                paciente
+                edicionHTML,
+                setEdicionHTML,
+                paciente,
+                eliminarPaciente
             }}
         >
             {children}

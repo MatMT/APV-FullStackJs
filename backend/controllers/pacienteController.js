@@ -19,7 +19,8 @@ const agregarPaciente = async (req, res) => {
 const obtenerPacientes = async (req, res) => {
     const pacientes = await Paciente.find()
         .where('vet')
-        .equals(req.veterinario);
+        .equals(req.veterinario)
+        .sort({ createdAt: -1 });
 
     res.json(pacientes);
 }

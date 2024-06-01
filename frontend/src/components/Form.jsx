@@ -12,11 +12,12 @@ const Form = () => {
     const [id, setId] = useState(null);
 
     const [alert, setAlert] = useState({});
-
-    const { savePaciente, paciente } = usePacientes();
+    const { savePaciente, paciente, edicionHTML, setEdicionHTML } = usePacientes();
 
     useEffect(() => {
         if (paciente?.name) {
+            setEdicionHTML(true);
+
             setName(paciente.name);
             setOwner(paciente.owner);
             setEmail(paciente.email);
@@ -25,7 +26,6 @@ const Form = () => {
 
             setId(paciente._id);
         }
-        console.log(paciente);
     }, [paciente]);
 
     const handleSubmit = e => {
@@ -40,9 +40,27 @@ const Form = () => {
             return;
         }
 
-        setAlert({});
         savePaciente({ name, owner, email, fechaAlta, symptoms, id });
+        setAlert({ msg: 'Paciente guardado correctamente' });
+        setEdicionHTML(false);
+        clearForm();
     }
+
+    const clearForm = () => {
+        setName('');
+        setOwner('');
+        setEmail('');
+        setfechaAlta('');
+        setSymptoms('');
+        setId(null);
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setAlert({ msg: '' });
+        }, 10000)
+
+    }, [alert])
 
     const { msg } = alert;
 
@@ -123,14 +141,20 @@ const Form = () => {
                     />
                 </div>
 
-                <input type="submit" value={id ? 'Guardar Cambios' : 'Registrar Paciente'}
-                    className="bg-rose-600 hover:bg-rose-700 w-full p-3 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors"
-                />
+                <div className={edicionHTML ? 'text-sm grid grid-cols-2 gap-4' : 'flex gap-4'}>
 
-                <input type="submit" value={id ? 'Guardar Cambios' : 'Registrar Paciente'}
-                    className="bg-rose-600 hover:bg-rose-700 w-full p-3 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors"
-                />
-            </form>
+                    <input type="submit" value={id ? 'Guardar Cambios' : 'Registrar Paciente'}
+                        className="bg-rose-600 hover:bg-rose-700 w-full p-3 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors"
+                    />
+
+                    {edicionHTML &&
+                        <input type="button" value='Nuevo Paciente'
+                            onClick={() => { clearForm(); setEdicionHTML(false); }}
+                            className="bg-gray-700 hover:bg-gray-800 w-full p-3 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors" />
+                    }
+                </div>
+
+            </form >
         </>
     )
 }

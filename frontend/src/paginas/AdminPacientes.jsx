@@ -7,10 +7,10 @@ function AdminPacientes() {
     const [showForm, setShowForm] = useState(false)
 
     return (
-        <div className='flex flex-col md:flex-row'>
+        <div className='flex flex-col md:flex-row items-center'>
 
             <button type="button"
-                className="bg-rose-600 hover:bg-rose-700 p-3 mx-10 mt-5 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors block md:hidden"
+                className="bg-rose-600 hover:bg-rose-700 p-3 mx-10 mb-8 text-white uppercase font-bold rounded-lg cursor-pointer transition-colors block md:hidden"
                 onClick={() => setShowForm(!showForm)}
             >
                 Mostrar Formulario
@@ -20,9 +20,14 @@ function AdminPacientes() {
                 <Form />
             </div>
 
-            <div className='md:w-1/2 lg:w-3/5'>
-                <ListadoPacientes />
+            <div className='relative md:w-1/2 lg:w-3/5 max-h-[850px]'>
+                <div className='overflow-y-auto max-h-[850px]'>
+                    <ListadoPacientes />
+                </div>
+
+                <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
             </div>
+
         </div>
     )
 }

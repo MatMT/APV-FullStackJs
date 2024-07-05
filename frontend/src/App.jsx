@@ -10,6 +10,9 @@ import ChangePass from "./paginas/ChangePass";
 import ConfirmAcc from "./paginas/ConfirmAcc";
 import NuevoPassword from "./paginas/NuevoPassword";
 import AdminPacientes from "./paginas/AdminPacientes";
+// 
+import CambiarPass from "./paginas/CambiarPass";
+import EditarPerfil from "./paginas/EditarPerfil";
 
 // Context
 import { AuthProvider } from "./context/AuthProvider";
@@ -35,6 +38,8 @@ function App() {
 
             <Route path="/admin" element={<RouteProtected />}>
               <Route index element={<AdminPacientes />} />
+              <Route path="perfil" element={<EditarPerfil />} />
+              <Route path="change-pass" element={<CambiarPass />} />
             </Route>
 
           </Routes>

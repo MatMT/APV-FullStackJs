@@ -49,6 +49,10 @@ const AuthProvider = ({ children }) => {
         setAuth({});
     }
 
+    const actualizarPerfil = datos => {
+        console.log(datos);
+    }
+
     return (
         <AuthContext.Provider
             // Disponer de manera Global
@@ -56,7 +60,8 @@ const AuthProvider = ({ children }) => {
                 auth,
                 setAuth,
                 cargando,
-                cerrarSesion
+                cerrarSesion,
+                actualizarPerfil
             }}
         >
             {children}

@@ -15,7 +15,7 @@ const Header = () => {
 
                 <nav className='flex flex-col lg:flex-row text-center gap-4 mt-5 lg:mt-0'>
                     <Link to="/admin" className='text-white text-xl font-bold uppercase'>Pacientes</Link>
-                    <Link to="/pefil" className='text-white text-xl font-bold uppercase'>Perfil</Link>
+                    <Link to="/admin/perfil" className='text-white text-xl font-bold uppercase'>Perfil</Link>
 
                     <button
                         type='button'

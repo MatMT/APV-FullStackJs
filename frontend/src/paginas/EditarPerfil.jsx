@@ -19,7 +19,7 @@ const EditarPerfil = () => {
     }, [auth])
 
     // Función para enviar el formulario
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
 
         const { name, email } = perfil;
@@ -32,7 +32,9 @@ const EditarPerfil = () => {
             return;
         }
 
-        actualizarPerfil(perfil);
+        const result = await actualizarPerfil(perfil);
+        // Mostrar alerta 
+        setAlerta(result);
     }
 
     const { msg } = alerta;
@@ -45,13 +47,13 @@ const EditarPerfil = () => {
             <p className="text-xl mt-5 mb-10 text-center">Modifica tu {''} <span className="text-rose-600 font-bold">Perfil</span></p>
 
             <div className="flex justify-center">
-                <div className="w-full md:w-1/2 bg-white shadow rounded-lg p-5">
+                <div className="w-full md:w-1/2 bg-white shadow rounded-lg p-5 ">
 
                     {msg && <Alerta alerta={alerta} />}
 
-                    <form action="my-3" onSubmit={handleSubmit}>
+                    <form className="my-3 space-y-6" onSubmit={handleSubmit}>
                         <div>
-                            <label className="uppercase font-bold text-gray-600" htmlFor="">Nombre</label>
+                            <label className="uppercase font-bold text-gray-600" htmlFor="name">Nombre</label>
                             <input className="border bg-gray-50 w-full p-2 mt-5 rounded-lg" type="text"
                                 name="name"
                                 value={perfil.name || ''}
@@ -65,7 +67,7 @@ const EditarPerfil = () => {
                         </div>
 
                         <div>
-                            <label className="uppercase font-bold text-gray-600" htmlFor="">Perfil</label>
+                            <label className="uppercase font-bold text-gray-600" htmlFor="web">Web</label>
                             <input className="border bg-gray-50 w-full p-2 mt-5 rounded-lg" type="text"
                                 name="web"
                                 value={perfil.web || ''}
@@ -79,7 +81,7 @@ const EditarPerfil = () => {
                         </div>
 
                         <div>
-                            <label className="uppercase font-bold text-gray-600" htmlFor="">Teléfono</label>
+                            <label className="uppercase font-bold text-gray-600" htmlFor="telephone">Teléfono</label>
                             <input className="border bg-gray-50 w-full p-2 mt-5 rounded-lg" type="text"
                                 name="telephone"
                                 value={perfil.telephone || ''}
@@ -93,7 +95,7 @@ const EditarPerfil = () => {
                         </div>
 
                         <div>
-                            <label className="uppercase font-bold text-gray-600" htmlFor="">Email</label>
+                            <label className="uppercase font-bold text-gray-600" htmlFor="email">Email</label>
                             <input className="border bg-gray-50 w-full p-2 mt-5 rounded-lg" type="text"
                                 name="email"
                                 value={perfil.email || ''}

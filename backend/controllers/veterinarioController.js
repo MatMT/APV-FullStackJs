@@ -5,7 +5,7 @@ import emailRegistro from "../helpers/emailRegistro.js";
 import emailSavePass from "../helpers/emailSavePass.js";
 
 const registrar = async (req, res) => {
-    const { email, name, nombre } = req.body;
+    const { email, name } = req.body;
 
     // Prevenir usuarios duplicados
     const existUser = await Veterinario.findOne({ email });
@@ -42,6 +42,42 @@ const perfil = (req, res) => {
 
     res.json({ veterinario })
 };
+
+const updatePerfil = async (req, res) => {
+    const veterinario = await Veterinario.findById(req.params.id);
+
+    if (!veterinario) {
+        const error = new Error('Veterinario no encontrado');
+        return res.status(400).json({ msg: error.message });
+    }
+
+    const { email } = req.body;
+    if (veterinario.email !== req.body.email) {
+        const existEmail = await Veterinario.findOne({ email });
+
+        if (existEmail) {
+            const error = new Error('El email ya está registrado');
+            return res.status(400).json({ msg: error.message });
+        }
+    }
+
+    try {
+        // Asignación de nuevos valores o valores por defecto
+        veterinario.name = req.body.name || veterinario.name;
+        veterinario.email = req.body.email || veterinario.email;
+        veterinario.web = req.body.web;
+        veterinario.telephone = req.body.telephone;
+
+        const veterinarioActualizado = await veterinario.save();
+
+        // Retornar el objeto actualizado
+        res.json(veterinarioActualizado);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+
+}
 
 // Válidar el email 
 const confirmar = async (req, res) => {
@@ -172,7 +208,7 @@ const newPassword = async (req, res) => {
 
 // Exportación de funciones para el router
 export {
-    registrar, perfil, confirmar,
+    registrar, perfil, updatePerfil, confirmar,
     autenticar, changePassword, validateToken,
     newPassword
 }

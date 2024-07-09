@@ -1,6 +1,6 @@
 import express from 'express';
 import checkAuth from '../middleware/authMiddleware.js';
-import { registrar, perfil, confirmar, autenticar, changePassword, validateToken, newPassword, updatePerfil } from '../controllers/veterinarioController.js';
+import { registrar, perfil, confirmar, autenticar, changePassword, validateToken, newPassword, updatePerfil, updatePassword } from '../controllers/veterinarioController.js';
 
 const router = express.Router();
 
@@ -18,5 +18,6 @@ router.route("/change-password/:token") // Chaining route
 // Implementación de middleware, antes de la respectiva función
 router.get('/profile', checkAuth, perfil)
 router.put('/profile/:id', checkAuth, updatePerfil)
+router.put('/update-password', checkAuth, updatePassword)
 
 export default router;

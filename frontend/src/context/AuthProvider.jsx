@@ -81,6 +81,39 @@ const AuthProvider = ({ children }) => {
         }
     }
 
+    const guardarPassword = async datos => {
+        // Extraer el Token de localStorage
+        const token = localStorage.getItem('token');
+
+        // Si no hay token
+        if (!token) {
+            setCargando(false);
+            return;
+        }
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        try {
+            const url = `/veterinarios/update-password`;
+            const { data } = await clienteAxios.put(url, datos, config);
+
+            return {
+                msg: data.msg,
+            }
+        } catch (error) {
+            return {
+                msg: error.response.data.msg,
+                error: true
+            }
+        }
+
+    }
+
     return (
         <AuthContext.Provider
             // Disponer de manera Global
@@ -89,7 +122,8 @@ const AuthProvider = ({ children }) => {
                 setAuth,
                 cargando,
                 cerrarSesion,
-                actualizarPerfil
+                actualizarPerfil,
+                guardarPassword
             }}
         >
             {children}

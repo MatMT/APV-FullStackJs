@@ -206,9 +206,41 @@ const newPassword = async (req, res) => {
     }
 }
 
+const updatePassword = async (req, res) => {
+    // Leer datos
+    const { _id } = req.veterinario;
+    const { pwd_actual, pwd_nuevo, pwd_confirm } = req.body;
+
+    // Compobrar existencia del veterinario
+    const veterinario = await Veterinario.findById(_id);
+
+    if (!veterinario) {
+        const error = new Error('Veterinario no encontrado');
+        return res.status(400).json({ msg: error.message });
+    }
+
+    // Comprobar su password
+    if (await veterinario.comprobarPassword(pwd_actual)) {
+        // Almacenar el nuevo password
+        if (pwd_nuevo !== pwd_confirm) {
+            const error = new Error('Las contraseñas no coinciden');
+            return res.status(400).json({ msg: error.message })
+        }
+
+        veterinario.password = pwd_nuevo;
+        await veterinario.save();
+        res.json({ msg: 'Password actualizado correctamente' })
+
+    } else {
+        const error = new Error('El Password actual es incorrecto');
+        return res.status(400).json({ msg: error.message });
+    }
+
+}
+
 // Exportación de funciones para el router
 export {
     registrar, perfil, updatePerfil, confirmar,
     autenticar, changePassword, validateToken,
-    newPassword
+    newPassword, updatePassword
 }

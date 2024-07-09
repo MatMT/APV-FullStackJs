@@ -35,7 +35,7 @@ function Registrar() {
 
         // Crear el usuario en la API
         try {
-            const url = `/veterinarios"`
+            const url = `/veterinarios`
             await clienteAxios.post(url, { name, email, password });
 
             setAlerta({
@@ -44,6 +44,7 @@ function Registrar() {
             });
 
         } catch (error) {
+            console.log(error);
             setAlerta({
                 msg: "Email ya registrado",
                 error: true
